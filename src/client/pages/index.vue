@@ -1,0 +1,122 @@
+<template>
+  <div>
+    <portal to="side-panel">
+      <div>
+        <layers-list
+          :layers="extendedLayers"
+          @toggleLayerVisibility="toggleLayerVisibility"
+        />
+      </div>
+    </portal>
+    <portal to="side-panel-bottom">
+      <div class="calculate-priorities">
+        <md-switch
+          v-model="liveUpdate"
+          class="calculate-priorities__live-update"
+        >
+          Live update
+        </md-switch>
+        <priority-matrix
+          :priorities="priorities"
+          class="calculate-priorities__matrix"
+          @updateMatrix="updatePriorities"
+        />
+        <button
+          :disabled="liveUpdate"
+          class="calculate-priorities__button button button--primary button--full-width"
+          @click="calculatePrioritiesMap"
+        >
+          RA2CE!
+        </button>
+      </div>
+    </portal>
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
+
+import { globalRoads, wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer } from '../lib/project-layers'
+import initMapState from '../lib/mixins/init-map-state'
+import layers from '../lib/_mapbox/layers'
+
+import { LayersList, PriorityMatrix } from '../components'
+
+const defaultPriorities = [
+  1, 1, 1, 1, 2,
+  1, 2, 2, 2, 3,
+  2, 2, 3, 3, 4,
+  3, 3, 4, 4, 5,
+  3, 4, 4, 5, 5,
+]
+
+export default {
+  components: { LayersList, PriorityMatrix },
+  mixins: [ initMapState ],
+  data() {
+    return {
+      liveUpdate: false,
+      priorities: defaultPriorities
+    }
+  },
+  computed: {
+    ...mapState('mapbox/wms', [ 'layers' ]),
+    ...mapGetters('mapbox/wms', [ 'extendedLayers' ]),
+    priosObject() {
+      const result = {}
+      const edgeSize = Math.sqrt(this.priorities.length)
+      for(let i=1;i<=edgeSize;i++) {
+        const row = [ undefined ]
+        for(let j=0;j<edgeSize;j++) {
+          const index = (i - 1) * edgeSize + j
+          row.push(this.priorities[index])
+        }
+        result[i] = row
+      }
+      return result
+    }
+  },
+  methods: {
+    calculatePrioritiesMap() {
+      console.log('Calculate prios-map with:', this.priosObject)
+    },
+    initMapState() {
+      console.log('Init map state', this.extendedLayers)
+      console.log('Init map state', this.priosObject)
+    },
+    toggleLayerVisibility({ index, active }) {
+      console.log('toggleLayerVisibility', this.extendedLayers)
+      this.$store.dispatch('mapbox/wms/setOpacity', {
+        id: this.extendedLayers[index].id,
+        opacity: active ? 1 : 0,
+      })
+    },
+    updatePriorities({ value, x, y }) {
+      if(this.liveUpdate) {
+        console.log('update and calculate')
+      } else {
+        console.log('just update')
+
+      }
+    }
+  }
+}
+</script>
+
+<style>
+  .calculate-priorities {
+    width: 100%;
+  }
+
+  .calculate-priorities__live-update {
+    margin-bottom: var(--spacing-half);
+  }
+
+  .calculate-priorities__matrix {
+    margin-bottom: var(--spacing-default);
+  }
+
+  .calculate-priorities__button {
+    margin-bottom: var(--spacing-default);
+  }
+</style>
