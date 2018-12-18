@@ -17,6 +17,7 @@
           Live update
         </md-switch>
         <priority-matrix
+          :edge-size="edgeSize"
           :priorities="priorities"
           class="calculate-priorities__matrix"
           @updateMatrix="updatePriorities"
@@ -37,7 +38,6 @@
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 
 import { globalRoads, wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer } from '../lib/project-layers'
-import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 
 import { LayersList, PriorityMatrix } from '../components'
@@ -52,7 +52,6 @@ const defaultPriorities = [
 
 export default {
   components: { LayersList, PriorityMatrix },
-  mixins: [ initMapState ],
   data() {
     return {
       liveUpdate: false,
@@ -62,41 +61,46 @@ export default {
   computed: {
     ...mapState('mapbox/wms', [ 'layers' ]),
     ...mapGetters('mapbox/wms', [ 'extendedLayers' ]),
-    priosObject() {
-      const result = {}
-      const edgeSize = Math.sqrt(this.priorities.length)
+    edgeSize() { return Math.sqrt(this.priorities.length) },
+    prioritiesMatrix() {
+      const result = []
+      const edgeSize = this.edgeSize
       for(let i=1;i<=edgeSize;i++) {
-        const row = [ undefined ]
+        const row = []
         for(let j=0;j<edgeSize;j++) {
           const index = (i - 1) * edgeSize + j
           row.push(this.priorities[index])
         }
-        result[i] = row
+        result.push(row)
       }
       return result
     }
   },
   methods: {
     calculatePrioritiesMap() {
-      console.log('Calculate prios-map with:', this.priosObject)
-    },
-    initMapState() {
-      console.log('Init map state', this.extendedLayers)
-      console.log('Init map state', this.priosObject)
+      console.log('Calculate prios-map with:', JSON.stringify(this.prioritiesMatrix))
     },
     toggleLayerVisibility({ index, active }) {
-      console.log('toggleLayerVisibility', this.extendedLayers)
       this.$store.dispatch('mapbox/wms/setOpacity', {
         id: this.extendedLayers[index].id,
         opacity: active ? 1 : 0,
       })
     },
     updatePriorities({ value, x, y }) {
-      if(this.liveUpdate) {
-        console.log('update and calculate')
-      } else {
-        console.log('just update')
+      console.log('update...', { value, x, y })
+      const newPriorities = [ ...this.priorities ]
+      if(value < 1 || value > 5) {
+        this.priorities = newPriorities
+        return
+      }
 
+      const index = (y-1) * this.edgeSize + (x-1)
+      newPriorities[index] = value
+      this.priorities = newPriorities
+
+      if(this.liveUpdate) {
+        console.log('and calculate')
+        this.calculatePrioritiesMap()
       }
     }
   }
