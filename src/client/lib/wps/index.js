@@ -1,11 +1,11 @@
 import axios from 'axios'
 import { xmlRequestTemplate } from './template'
 
-export default function({ functionId, requestData, polygon, roadsIdentifier }) {
-  const template = xmlRequestTemplate({ functionId, requestData, polygon, roadsIdentifier })
+export default function({ functionId, requestData, polygon, roadsIdentifier, ...rest }) {
+  const template = xmlRequestTemplate({ functionId, requestData, polygon, roadsIdentifier, ...rest })
   return axios({
     method: 'post',
-    url: 'https://ri2de.openearth.eu/wps',
+    url: process.env.WPS_URL,
     data: template,
     headers: {'Content-Type': 'application/xml'},
   })

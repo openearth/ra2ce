@@ -3,7 +3,7 @@ export const state = () => ({
   completed: {
     infrastructure: false,
     hazards: false,
-  }
+  },
 })
 
 export const mutations = {

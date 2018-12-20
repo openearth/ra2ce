@@ -14,6 +14,10 @@
       </div>
     </side-panel>
     <div class="map-container">
+      <layer-legend
+        v-if="legendLayer"
+        :layer="legendLayer"
+      />
       <portal-target
         name="map-notification"
         slim
@@ -29,13 +33,17 @@ import { mapState } from 'vuex'
 
 import { operatorCosts, societalCosts } from '../lib/project-layers'
 
-import { AppHeader, MapboxMap, SidePanel } from '../components'
+import { AppHeader, LayerLegend, MapboxMap, SidePanel } from '../components'
 
 export default {
   components: {
     AppHeader,
+    LayerLegend,
     MapboxMap,
     SidePanel
+  },
+  computed: {
+    ...mapState('mapbox', [ 'legendLayer' ])
   },
   methods: {
     initializeMap(map) {

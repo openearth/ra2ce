@@ -36,3 +36,9 @@ export const societalCosts = generateWmsLayer({
   id: 'societal_costs',
   layer: 'ra2ce:societal_costs',
 })
+
+export const priorities = generateWmsLayer({
+  id: 'priorities',
+  layer: 'ra2ce:classroads_testing',
+  style: 'ra2ce',
+})

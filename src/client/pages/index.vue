@@ -4,6 +4,7 @@
       <div>
         <layers-list
           :layers="extendedLayers"
+          @selectLayer="selectLayer"
           @toggleLayerVisibility="toggleLayerVisibility"
         />
       </div>
@@ -37,8 +38,9 @@
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 
-import { globalRoads, wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer } from '../lib/project-layers'
+import { globalRoads, wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer, priorities } from '../lib/project-layers'
 import layers from '../lib/_mapbox/layers'
+import wps from '../lib/wps'
 
 import { LayersList, PriorityMatrix } from '../components'
 
@@ -55,7 +57,8 @@ export default {
   data() {
     return {
       liveUpdate: false,
-      priorities: defaultPriorities
+      priorities: defaultPriorities,
+      selectedLayerIndex: undefined,
     }
   },
   computed: {
@@ -78,7 +81,25 @@ export default {
   },
   methods: {
     calculatePrioritiesMap() {
-      console.log('Calculate prios-map with:', JSON.stringify(this.prioritiesMatrix))
+      wps({
+        functionId: 'ra2ce_calc_ratio',
+        uid: '1234',
+        json_matrix: { values: this.prioritiesMatrix },
+      })
+        .then(wpsResponse => console.log('wpsResponse', wpsResponse))
+        .catch(err => console.log('Error calling wps service:', err))
+
+      console.log('PRIOS', priorities)
+
+      this.$store.dispatch('mapbox/wms/remove', priorities.id)
+      this.$store.dispatch('mapbox/wms/add', priorities)
+    },
+    selectLayer(index) {
+      console.log('Select the layer with index:', index)
+      this.$store.commit('mapbox/setLegendLayer', {
+        layer: 'ra2ce:operator_costs',
+        style: 'ra2ce',
+       })
     },
     toggleLayerVisibility({ index, active }) {
       this.$store.dispatch('mapbox/wms/setOpacity', {

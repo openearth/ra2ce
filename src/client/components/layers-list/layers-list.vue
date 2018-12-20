@@ -5,22 +5,22 @@
         Map layers
       </md-subheader>
       <div class="layers-list__list">
-        <div
+        <md-list-item
           v-for="(layer, index) in layers"
           :key="layer.id"
+          class="layers-list__list-item"
+          @click="$emit('selectLayer', index)"
         >
-          <md-list-item class="layers-list__list-item">
-            <md-button
-              class="md-icon-button"
-              @click="toggleLayerVisibility(index)"
-            >
-              <md-icon :disabled="!layer.visible">
-                {{ layer.visible ? 'visibility' : 'visibility_off' }}
-              </md-icon>
-            </md-button>
-            <span class="layers-list__list-item-title">{{ formatId2Title(layer.id) }}</span>
-          </md-list-item>
-        </div>
+          <md-button
+            class="md-icon-button"
+            @click="toggleLayerVisibility(index)"
+          >
+            <md-icon :disabled="!layer.visible">
+              {{ layer.visible ? 'visibility' : 'visibility_off' }}
+            </md-icon>
+          </md-button>
+          <span class="layers-list__list-item-title">{{ formatId2Title(layer.id) }}</span>
+        </md-list-item>
       </div>
     </md-list>
   </div>

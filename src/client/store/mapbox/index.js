@@ -3,7 +3,8 @@ import { MAP_CENTER, MAP_ZOOM } from '../../lib/_mapbox/map-config'
 export const state = () => ({
   mapObject: {},
   eventHandlers: {},
-  mapIsLoaded: false
+  legendLayer: undefined,
+  mapIsLoaded: false,
 })
 
 export const mutations = {
@@ -20,9 +21,12 @@ export const mutations = {
       state.eventHandlers = { ...state.eventHandlers, [event]: undefined }
     }
   },
+  setLegendLayer(state, layer) {
+    state.legendLayer = layer
+  },
   setMapIsLoaded(state, loaded) {
     state.mapIsLoaded = loaded
-  }
+  },
 }
 
 export const actions = {

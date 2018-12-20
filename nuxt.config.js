@@ -9,6 +9,7 @@ module.exports = {
     // pass Node env variables to Nuxt env:
     GEOSERVER_BASE_URL: process.env.GEOSERVER_BASE_URL,
     MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
+    WPS_URL: process.env.WPS_URL,
   },
 
   mode: 'universal',
