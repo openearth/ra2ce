@@ -28,11 +28,7 @@ function wpsInput(identifier, data) {
 }
 
 function inputsToWpsInputs(inputs) {
-  console.log('Inputs', inputs)
-
   const x = Object.keys(inputs).reduce((xml, key) => `${ xml }${wpsInput(key, JSON.stringify(inputs[key]))}\n`, '')
-
-  console.log('STRRRR', x)
 
   return Object.keys(inputs)
     .reduce((xml, key) => `${ xml }${wpsInput(key, JSON.stringify(inputs[key]))}\n`, '')

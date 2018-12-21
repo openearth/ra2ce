@@ -51,10 +51,14 @@ export default {
       map.on('load', () => {
         this.$store.dispatch('mapbox/wms/add', operatorCosts)
         this.$store.dispatch('mapbox/wms/add', societalCosts)
+        this.$store.dispatch('mapbox/addEventHandler', {
+          event: 'fitbounds',
+          handler: (event) => this.$store.dispatch('mapbox/moveMapToCenter')
+        })
       })
     },
     restartApp() {
-      console.log('restart app')
+      this.$store.commit('priorities/resetPriorities')
     }
   }
 }

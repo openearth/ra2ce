@@ -2,7 +2,7 @@
   <div>
     <md-list class="layers-list">
       <md-subheader class="layers-list__header">
-        Map layers
+        Layers
       </md-subheader>
       <div class="layers-list__list">
         <md-list-item
@@ -13,7 +13,7 @@
         >
           <md-button
             class="md-icon-button"
-            @click="toggleLayerVisibility(index)"
+            @click.stop="toggleLayerVisibility(index)"
           >
             <md-icon :disabled="!layer.visible">
               {{ layer.visible ? 'visibility' : 'visibility_off' }}

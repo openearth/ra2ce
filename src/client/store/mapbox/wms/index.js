@@ -1,3 +1,5 @@
+import { parseUrl } from 'query-string'
+
 export const state = () => ({
   layers: [],
 })
@@ -80,5 +82,12 @@ export const getters = {
           visible,
         }
       })
+  },
+  layerLegends(state) {
+    return state.layers
+      .map(layer => layer.source.tiles[0] )
+      .map(parseUrl)
+      .map(url => url.query)
+      .map(({ style, layers }) => ({ style, layer: layers }))
   }
 }

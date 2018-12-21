@@ -30,7 +30,7 @@ export default {
 <style>
   .layer-legend {
     position: absolute;
-    width: 170px;
+    width: 175px;
     bottom: 2rem;
     left: .5rem;
     background-color: white;

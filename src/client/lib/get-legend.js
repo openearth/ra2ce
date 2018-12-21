@@ -4,7 +4,8 @@ export default function({
   url,
   layer='',
   format='image/png',
-  width=170,
+  width=40,
+  height=60,
   ...rest
 }) {
   return geoServerUrl({
@@ -14,6 +15,7 @@ export default function({
     layer,
     format,
     width,
+    height,
     ...rest,
   })
 }

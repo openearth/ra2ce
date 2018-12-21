@@ -30,10 +30,8 @@ export const operatorCosts = generateWmsLayer({
   layer: 'ra2ce:operator_costs',
 })
 
-
-
 export const societalCosts = generateWmsLayer({
-  id: 'societal_costs',
+  id: 'societal_losses',
   layer: 'ra2ce:societal_costs',
 })
 
