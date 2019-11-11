@@ -13,7 +13,7 @@
     </v-app-bar>
 
     <v-content>
-      <!-- <app-map /> -->
+      <mapbox-map />
     </v-content>
 
     <welcome-dialog />
@@ -22,13 +22,14 @@
 </template>
 
 <script>
-// import AppMap from '@/components/app-map';
 import Sidebar from '@/components/app-shell/sidebar';
+import MapboxMap from '@/components/mapbox-map';
 import WelcomeDialog from './welcome-dialog';
 
 export default {
   components: {
     Sidebar,
+    MapboxMap,
     WelcomeDialog
   }
 };
