@@ -1,5 +1,6 @@
 import buildGeoserverUrl from './build-geoserver-url';
 import wms from './mapbox/layers/wms';
+import { CUSTOM_LAYERS } from './constants';
 
 export const generateWmsLayer = ({ url, id, layer, style='', paint={} }) => {
   const tile = buildGeoserverUrl({
@@ -25,18 +26,12 @@ export const generateWmsLayer = ({ url, id, layer, style='', paint={} }) => {
   });
 };
 
-export const operatorCosts = generateWmsLayer({
-  id: 'operator_costs',
-  layer: 'ra2ce:operator_costs',
-});
+export const operatorCosts = generateWmsLayer(CUSTOM_LAYERS.OPERATOR_COSTS);
 
-export const societalCosts = generateWmsLayer({
-  id: 'societal_losses',
-  layer: 'ra2ce:societal_costs',
-});
+export const societalCosts = generateWmsLayer(CUSTOM_LAYERS.SOCIETAL_COSTS);
 
-export const priorities = generateWmsLayer({
-  id: 'priorities',
-  layer: 'ra2ce:classroads_testing',
-  style: 'ra2ce',
-});
+// export const priorities = generateWmsLayer({
+//   id: 'priorities',
+//   layer: 'ra2ce:classroads_testing',
+//   style: 'ra2ce'
+// });

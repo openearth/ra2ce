@@ -3,10 +3,9 @@
     <v-mapbox
       class="mapbox-map__map"
       :access-token="mapBoxToken"
-      map-style="mapbox://styles/mapbox/light-v9"
-      :center="[19.819025, 41.327953]"
-      lala="[5.2913, 52.1326]"
-      :zoom="7"
+      :map-style="mapConfig.style"
+      :center="mapConfig.center"
+      :zoom="mapConfig.zoom"
       @mb-created="onMapCreated"
       id="map"
       ref="map"
@@ -28,6 +27,7 @@
 <script>
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import { MAP_CENTER, MAP_ZOOM, MAP_BASELAYER_DEFAULT } from '@/lib/constants';
 import { operatorCosts, societalCosts } from '@/lib/project-layers';
 
 export default {
@@ -37,6 +37,13 @@ export default {
     },
     wmsLayers() {
       return this.$store.getters['mapbox/wmsLayers'];
+    },
+    mapConfig() {
+      return {
+        center: MAP_CENTER,
+        zoom: MAP_ZOOM,
+        style: MAP_BASELAYER_DEFAULT.style
+      };
     }
   },
 

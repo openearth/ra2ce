@@ -10,8 +10,7 @@ export default {
 
   getters: {
     wmsLayers: state => state.wmsLayers,
-    legendLayerId: state => state.legendLayerId,
-    legendLayer: state => state.wmsLayers.find(layer => layer.id === state.legendLayerId) || null
+    legendLayerId: state => state.legendLayerId
   },
 
   mutations: {

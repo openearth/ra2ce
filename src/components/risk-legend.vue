@@ -9,8 +9,7 @@
 </template>
 
 <script>
-import { parseUrl } from 'query-string';
-import buildLegendUrl from '@/lib/build-legend-url';
+import legends from '@/lib/project-legends';
 
 export default {
   props: {
@@ -22,12 +21,7 @@ export default {
 
   computed: {
     legendUrl() {
-      return this.$store.getters['mapbox/legendLayer']
-        |> (layer => layer.source.tiles[0])
-        |> parseUrl
-        |> (params => ({ layer: params.query.layers }))
-        |> buildLegendUrl
-      ;
+      return legends.find(({ id }) => id === this.riskId).url;
     }
   }
 };
