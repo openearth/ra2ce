@@ -9,6 +9,9 @@ Vue.config.productionTip = false;
 Vue.use(Vue2MapboxGL);
 
 new Vue({
+  data: {
+    mapLoaded: false
+  },
   router,
   store,
   vuetify,

@@ -1,10 +1,5 @@
 <template>
   <div class="mapbox-map">
-    <pre>
-      {{
-        wmsLayers
-      }}
-    </pre>
     <v-mapbox
       class="mapbox-map__map"
       :access-token="mapBoxToken"
@@ -47,7 +42,12 @@ export default {
 
   methods: {
     onMapCreated(map) {
+      // @TODO :: We need the updated vue2mapbox!!
+      // console.log(map);
       this.$root.map = map;
+      map.on('load', () => {
+        this.$root.mapLoaded = true;
+      });
     }
   },
 

@@ -13,6 +13,10 @@
     </v-app-bar>
 
     <v-content>
+      <risk-legend
+        v-if="legendLayerId"
+        :risk-id="legendLayerId"
+      />
       <mapbox-map />
     </v-content>
 
@@ -22,15 +26,23 @@
 </template>
 
 <script>
-import Sidebar from '@/components/app-shell/sidebar';
-import MapboxMap from '@/components/mapbox-map';
+import Sidebar from './sidebar';
 import WelcomeDialog from './welcome-dialog';
+import MapboxMap from '@/components/mapbox-map';
+import RiskLegend from '@/components/risk-legend';
 
 export default {
   components: {
     Sidebar,
+    WelcomeDialog,
     MapboxMap,
-    WelcomeDialog
+    RiskLegend
+  },
+
+  computed: {
+    legendLayerId() {
+      return this.$store.getters['mapbox/legendLayerId'];
+    }
   }
 };
 </script>
