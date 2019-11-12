@@ -1,4 +1,4 @@
-# ra2ce
+# RA2CE
 
 ## Project setup
 ```
