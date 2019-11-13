@@ -6,16 +6,39 @@
       @updateVisibility="onVisibilityChange"
       @updateLegend="onLegendChange"
     />
+    <priority-matrix
+      :edge-size="edgeSize"
+      :priorities="priorities"
+      @updateMatrix="updatePriorities"
+    />
+    <v-btn
+      :disabled="liveUpdate"
+      @click="calculatePrioritiesMap"
+    >
+      RA2CE!
+    </v-btn>
   </div>
 </template>
 
 <script>
+import debounce from 'lodash.debounce';
+import wps from '@/lib/wps';
+import { priorities } from '@/lib/project-layers';
+
 import RisksList from '@/components/risks-list';
+import PriorityMatrix from '@/components/priority-matrix';
 
 export default {
   components: {
-    RisksList
+    RisksList,
+    PriorityMatrix
   },
+
+  data: () => ({
+    liveUpdate: false,
+    getPrioritiesMessage: null,
+    getPrioritiesError: null
+  }),
 
   computed: {
     risks() {
@@ -23,6 +46,15 @@ export default {
     },
     legendLayerId() {
       return this.$store.getters['mapbox/legendLayerId'];
+    },
+    edgeSize() {
+      return this.$store.getters['priorities/edgeSize'];
+    },
+    priorities() {
+      return this.$store.getters['priorities/priorities'];
+    },
+    prioritiesMatrix() {
+      return this.$store.getters['priorities/prioritiesMatrix'];
     }
   },
 
@@ -36,7 +68,33 @@ export default {
     },
     onLegendChange(id) {
       this.$store.commit('mapbox/SET_LEGEND_LAYER', this.legendLayerId === id ? null : id);
-    }
+    },
+    updatePriorities(updateData) {
+      this.$store.commit('priorities/updatePriorities', updateData);
+
+      if(this.liveUpdate) {
+        this.calculatePrioritiesMap();
+      }
+    },
+    calculatePrioritiesMap: debounce(function() {
+      console.log('start!');
+      this.getPrioritiesMessage = 'Calculating the priorities layer';
+      this.getPrioritiesError = null;
+      wps({
+        functionId: 'ra2ce_calc_ratio',
+        uid: '1234',
+        json_matrix: { values: this.prioritiesMatrix },
+      })
+      .then(() => {
+        this.getPrioritiesMessage = null;
+        this.$store.commit('mapbox/REMOVE_WMS_LAYER', priorities.id);
+        this.$store.commit('mapbox/ADD_WMS_LAYER', priorities);
+      })
+      .catch(() => {
+        this.getPrioritiesMessage = null;
+        this.getPrioritiesError = 'Error Calculating the priorities layer, please retry';
+      });
+    }, 300)
   }
 
 };

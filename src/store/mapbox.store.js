@@ -1,5 +1,3 @@
-
-
 export default {
   namespaced: true,
 
@@ -25,12 +23,11 @@ export default {
         ];
       }
     },
+    REMOVE_WMS_LAYER(state, id) {
+      state.wmsLayers = state.wmsLayers.filter(layer => layer.id !== id);
+    },
     SET_LEGEND_LAYER(state, id) {
       state.legendLayerId = id;
     }
-  },
-
-  actions: {
-
   }
 };
