@@ -42,7 +42,10 @@ export default {
 
   computed: {
     risks() {
-      return this.$store.getters['mapbox/wmsLayers'];
+      return this.$store.getters['mapbox/layersWithVisibility'];
+    },
+    riskVisibilityProxies() {
+      return this.$store.getters['mapbox/layerVisibilityProxies'];
     },
     legendLayerId() {
       return this.$store.getters['mapbox/legendLayerId'];
@@ -61,10 +64,7 @@ export default {
   methods: {
     onVisibilityChange(id) {
       const map = this.$root.map;
-      const risk = this.risks.find(risk => risk.id === id);
-      const opacityToSet = risk.visible ? 0 : 1;
-      map.setPaintProperty(id, 'raster-opacity', opacityToSet);
-      risk.visible = !risk.visible;
+      this.$store.commit('mapbox/UPDATE_LAYER_VISIBILITY', { id, map });
     },
     onLegendChange(id) {
       this.$store.commit('mapbox/SET_LEGEND_LAYER', this.legendLayerId === id ? null : id);
@@ -77,7 +77,6 @@ export default {
       }
     },
     calculatePrioritiesMap: debounce(function() {
-      console.log('start!');
       this.getPrioritiesMessage = 'Calculating the priorities layer';
       this.getPrioritiesError = null;
       wps({
