@@ -11,18 +11,22 @@
       :edge-size="edgeSize"
       :priorities="priorities"
       @updateMatrix="updatePriorities"
+      @reset="restart"
     />
-    <v-switch
-      label="Live Update"
-      v-model="liveUpdate"
-    ></v-switch>
-    <v-btn
-      :disabled="liveUpdate"
-      @click="calculatePrioritiesMap"
-    >
-      RA2CE!
-    </v-btn>
-    <restart-button @button-click="restart"/>
+    <div class="mt-4 d-flex align-center">
+      <v-switch
+        label="Live Update"
+        v-model="liveUpdate"
+      ></v-switch>
+      <v-spacer />
+      <v-btn
+        :disabled="liveUpdate"
+        @click="calculatePrioritiesMap"
+        color="primary"
+      >
+        RA2CE! 🏎
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -33,13 +37,11 @@ import { priorities } from '@/lib/project-layers';
 
 import RisksList from '@/components/risks-list';
 import PriorityMatrix from '@/components/priority-matrix';
-import RestartButton from '@/components/restart-button';
 
 export default {
   components: {
     RisksList,
     PriorityMatrix,
-    RestartButton
   },
 
   data: () => ({

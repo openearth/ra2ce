@@ -3,9 +3,13 @@
     class="priority-matrix"
     @submit.prevent
   >
-    <h2 class="pb-4">
-      Priorities matrix
-    </h2>
+    <header class="d-flex">
+      <h2 class="pb-4">
+        Priorities matrix
+      </h2>
+      <v-spacer />
+      <v-btn @click="onResetClick">Reset</v-btn>
+    </header>
     <table class="priority-matrix__table">
       <tbody class="priority-matrix__tbody">
         <tr class="priority-matrix__y-axis">
@@ -118,6 +122,9 @@ export default {
     },
     updateMatrix({ value, x, y }) {
       this.$emit('updateMatrix', { value: Number(value), x, y });
+    },
+    onResetClick() {
+      this.$emit('reset');
     }
   }
 };
