@@ -1,22 +1,23 @@
 module.exports = {
   root: true,
   env: {
-    browser: true,
     node: true
+  },
+  'extends': [
+    'plugin:vue/essential',
+    'eslint:recommended'
+  ],
+  rules: {
+    'semi': [
+      1,
+      'always'
+    ],
+    'no-unused-vars': 1,
+    'no-debugger': 'off',
+    'no-console': 0,
+    'vue/no-use-v-if-with-v-for': 0
   },
   parserOptions: {
     parser: 'babel-eslint'
-  },
-  extends: [
-    'plugin:vue/recommended'
-  ],
-  // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
-  // add your custom rules here
-  rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }
