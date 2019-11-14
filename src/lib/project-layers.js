@@ -30,8 +30,4 @@ export const operatorCosts = generateWmsLayer(CUSTOM_LAYERS.OPERATOR_COSTS);
 
 export const societalCosts = generateWmsLayer(CUSTOM_LAYERS.SOCIETAL_COSTS);
 
-export const priorities = generateWmsLayer({
-  id: 'priorities',
-  layer: 'ra2ce:classroads_testing',
-  style: 'ra2ce'
-});
+export const priorities = generateWmsLayer(CUSTOM_LAYERS.PRIORITIES);

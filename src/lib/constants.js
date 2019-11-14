@@ -31,5 +31,11 @@ export const CUSTOM_LAYERS = {
   SOCIETAL_COSTS: {
     id: 'societal_losses',
     layer: 'ra2ce:societal_costs',
+  },
+
+  PRIORITIES: {
+    id: 'priorities',
+    layer: 'ra2ce:classroads_testing',
+    style: 'ra2ce'
   }
 };
