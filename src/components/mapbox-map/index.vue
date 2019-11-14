@@ -1,41 +1,43 @@
 <template>
   <div class="mapbox-map">
-    <v-mapbox
-      class="mapbox-map__map"
-      :access-token="mapBoxToken"
-      :map-style="mapConfig.style"
+    <mgl-map
+      :mapStyle="mapConfig.style"
+      :accessToken="mapBoxToken"
       :center="mapConfig.center"
       :zoom="mapConfig.zoom"
-      @mb-created="onMapCreated"
-      id="map"
-      ref="map"
+      @load="onMapCreated"
     >
       <!-- Map Controls -->
-      <v-mapbox-geocoder />
-      <v-mapbox-navigation-control position="bottom-right" />
+      <mgl-navigation-control position="bottom-right" />
+      <map-search position="top-right" />
 
       <!-- Map Layers -->
-      <map-layer
+      <raster-layer
         v-for="layer in wmsLayers"
         :key="layer.id"
-        :options="layer"
+        :layer="layer"
       />
-    </v-mapbox>
+    </mgl-map>
   </div>
 </template>
 
 <script>
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import Mapbox from "mapbox-gl";
+import { MglMap, MglNavigationControl } from "vue-mapbox";
 import { MAP_CENTER, MAP_ZOOM, MAP_BASELAYER_DEFAULT } from '@/lib/constants';
 import { operatorCosts, societalCosts } from '@/lib/project-layers';
-import MapLayer from './map-layer.js';
+import RasterLayer from './raster-layer';
+import MapSearch from './map-search';
 
 export default {
   components: {
-    MapLayer
+    RasterLayer,
+    MglMap,
+    MglNavigationControl,
+    MapSearch
   },
-
   computed: {
     mapBoxToken() {
       return process.env.VUE_APP_MAPBOX_TOKEN;
@@ -51,19 +53,13 @@ export default {
       };
     }
   },
-
   methods: {
     onMapCreated(map) {
-      // @TODO :: We need the updated vue2mapbox!!
-      // console.log(map);
       this.$root.map = map;
-      map.on('load', () => {
-        this.$root.mapLoaded = true;
-      });
     }
   },
-
   created() {
+    this.mapbox = Mapbox;
     this.$store.commit('mapbox/ADD_WMS_LAYER', operatorCosts);
     this.$store.commit('mapbox/ADD_WMS_LAYER', societalCosts);
   }
