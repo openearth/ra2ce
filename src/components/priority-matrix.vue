@@ -73,12 +73,12 @@
             class="priority-matrix__element"
           >
             <input
+              class="priority-matrix__value"
               :class="`priority-matrix__value--${priorityToClass(priorities[ ((y-1) * edgeSize + x) - 1 ])}`"
               :value="priorities[ ((y-1) * edgeSize + x) - 1 ]"
               :min="1"
               :max="edgeSize"
               type="number"
-              class="priority-matrix__value"
               @change="(event) => updateMatrix({ value: event.target.value, x, y })"
               @focus="$event.target.select()"
             >
@@ -166,11 +166,10 @@ export default {
     margin: 0;
   }
 
-  .priority-matrix__value {
+  .priority-matrix .priority-matrix__value {
     color: #2f2d2e;
     width: 100%;
-    height: 100%;
-    border: 1px solid #b3b2b3;
+    height: 40px;
     text-align: center;
     font-size: 20px;
     line-height: 20px;
