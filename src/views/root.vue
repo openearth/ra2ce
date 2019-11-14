@@ -70,7 +70,7 @@ export default {
       this.$store.commit('mapbox/SET_LEGEND_LAYER', this.legendLayerId === id ? null : id);
     },
     updatePriorities(updateData) {
-      this.$store.commit('priorities/updatePriorities', updateData);
+      this.$store.commit('priorities/UPDATE_PRIORITIES', updateData);
 
       if(this.liveUpdate) {
         this.calculatePrioritiesMap();

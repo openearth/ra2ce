@@ -34,10 +34,10 @@ export default {
   },
 
   mutations: {
-    resetPriorities(state) {
+    RESET_PRIORITIES(state) {
       state.priorities = initialPriorities;
     },
-    updatePriorities(state, { value, x, y }) {
+    UPDATE_PRIORITIES(state, { value, x, y }) {
       const newPriorities = [ ...state.priorities ];
 
       if(value < 1 || value > 5) {
