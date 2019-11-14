@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div >
     <risks-list
       :risks="risks"
       :activeLegendId="legendLayerId || ''"
       @updateVisibility="onVisibilityChange"
       @updateLegend="onLegendChange"
+      class="mb-8"
     />
     <priority-matrix
       :edge-size="edgeSize"

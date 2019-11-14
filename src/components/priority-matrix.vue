@@ -3,8 +3,10 @@
     class="priority-matrix"
     @submit.prevent
   >
+    <h2 class="pb-4">
+      Priorities matrix
+    </h2>
     <table class="priority-matrix__table">
-      <caption class="priority-matrix__caption">Priorities matrix</caption>
       <tbody class="priority-matrix__tbody">
         <tr class="priority-matrix__y-axis">
           <th
@@ -140,13 +142,9 @@ export default {
     padding: 0 1rem 0.7rem;
     text-align: left;
     border-bottom: solid 1px #eee;
-
-    margin-top: 4rem; /* @TODO :: Style properly */
   }
 
   .priority-matrix__row {
-    /* display: flex;
-    justify-content: space-evenly; */
     margin-bottom: .5rem;
 
   }
@@ -177,9 +175,10 @@ export default {
 
   .priority-matrix__y-axis {
     position: absolute;
-    transform: rotateZ(-90deg);
-    left: -60px;
-    top: 180px;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: left bottom;
+    top: 75%;
+    left: 1rem
   }
 
   .priority-matrix__value--very-low {

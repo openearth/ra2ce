@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>
+    <h2 class="pb-4">
       Risks
     </h2>
     <ul class="risks-list">
