@@ -11,7 +11,6 @@
         RA2CE
       </v-toolbar-title>
       <v-spacer/>
-      <restart-button />
     </v-app-bar>
 
     <v-content>
@@ -30,7 +29,6 @@
 <script>
 import Sidebar from './sidebar';
 import WelcomeDialog from './welcome-dialog';
-import RestartButton from '@/components/restart-button';
 import MapboxMap from '@/components/mapbox-map';
 import RiskLegend from '@/components/risk-legend';
 
@@ -38,7 +36,6 @@ export default {
   components: {
     Sidebar,
     WelcomeDialog,
-    RestartButton,
     MapboxMap,
     RiskLegend
   },

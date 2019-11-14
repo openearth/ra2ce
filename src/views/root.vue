@@ -11,12 +11,17 @@
       :priorities="priorities"
       @updateMatrix="updatePriorities"
     />
+    <v-switch
+      label="Live Update"
+      v-model="liveUpdate"
+    ></v-switch>
     <v-btn
       :disabled="liveUpdate"
       @click="calculatePrioritiesMap"
     >
       RA2CE!
     </v-btn>
+    <restart-button @button-click="restart"/>
   </div>
 </template>
 
@@ -27,11 +32,13 @@ import { priorities } from '@/lib/project-layers';
 
 import RisksList from '@/components/risks-list';
 import PriorityMatrix from '@/components/priority-matrix';
+import RestartButton from '@/components/restart-button';
 
 export default {
   components: {
     RisksList,
-    PriorityMatrix
+    PriorityMatrix,
+    RestartButton
   },
 
   data: () => ({
@@ -66,9 +73,11 @@ export default {
       const map = this.$root.map;
       this.$store.commit('mapbox/UPDATE_LAYER_VISIBILITY', { id, map });
     },
+
     onLegendChange(id) {
       this.$store.commit('mapbox/SET_LEGEND_LAYER', this.legendLayerId === id ? null : id);
     },
+
     updatePriorities(updateData) {
       this.$store.commit('priorities/UPDATE_PRIORITIES', updateData);
 
@@ -76,6 +85,7 @@ export default {
         this.calculatePrioritiesMap();
       }
     },
+
     calculatePrioritiesMap: debounce(function() {
       this.getPrioritiesMessage = 'Calculating the priorities layer';
       this.getPrioritiesError = null;
@@ -93,7 +103,12 @@ export default {
         this.getPrioritiesMessage = null;
         this.getPrioritiesError = 'Error Calculating the priorities layer, please retry';
       });
-    }, 300)
+    }, 300),
+
+    restart() {
+      this.$store.commit('priorities/RESET_PRIORITIES');
+      this.calculatePrioritiesMap();
+    }
   }
 
 };
