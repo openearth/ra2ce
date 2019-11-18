@@ -7,9 +7,9 @@ import AppShell from '@/components/app-shell';
 Vue.config.productionTip = false;
 
 new Vue({
-  data: {
-    mapLoaded: false
-  },
+  // data: {
+  //   mapLoaded: false
+  // }, TO_DELETE :: Looks outdated
   router,
   store,
   vuetify,

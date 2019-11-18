@@ -54,7 +54,7 @@ export default {
     }
   },
   methods: {
-    onMapCreated(map) {
+    onMapCreated({ map }) {
       this.$root.map = map;
     }
   },
