@@ -184,7 +184,7 @@ export default {
     position: absolute;
     transform: translateY(-50%) rotate(-90deg);
     transform-origin: left bottom;
-    top: 75%;
+    top: 89%;
     left: 1rem
   }
 
