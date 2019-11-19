@@ -42,6 +42,14 @@ export default {
     currentLayerIndex: 0
   }),
 
+  computed: {
+    // @REFACTOR :: This is now tightly coupling control with implementation.
+    // We should come up with a robust way to rerender layers on style change.
+    wmsLayers() {
+      return this.$store.getters['mapbox/wmsLayers'];
+    },
+  },
+
   mounted() {
     const map = this.getMap();
     // If we are already loaded
@@ -51,6 +59,29 @@ export default {
   },
 
   methods: {
+    switchBaseLayer() {
+      const nextIndex = (this.currentLayerIndex + 1) % this.layers.length;
+      const { style } = this.layers[nextIndex];
+      const map = this.getMap();
+
+      // First remove all layers
+      this.wmsLayers.forEach(({ id }) => {
+        map.removeLayer(id);
+        map.removeSource(id);
+      });
+      this.$store.commit('mapbox/RESET_LAYERS_VISIBILITY');
+
+      map.setStyle(style);
+      this.currentLayerIndex = nextIndex;
+
+      // Then re-add all layers
+      map.once('style.load', () => {
+        this.wmsLayers.forEach((layer) => {
+          map.addLayer(layer);
+        });
+      });
+    },
+
     deferredMountedTo(map) {
       this.addToMap(map);
     },
@@ -60,14 +91,6 @@ export default {
       const control = new MapControlBaselayer($control);
       map.addControl(control, this.position);
       this.showControl = true;
-    },
-
-    switchBaseLayer() {
-      const nextIndex = (this.currentLayerIndex + 1) % this.layers.length;
-      const { style } = this.layers[nextIndex];
-      const map = this.getMap();
-      map.setStyle(style);
-      this.currentLayerIndex = nextIndex;
     }
   }
 };

@@ -16,7 +16,7 @@
       <map-control-baselayer
         :layers="mapBaseLayers"
         position="bottom-right"
-      >
+      />
       <map-control-fitbounds
         :fitToBounds="fitToBounds"
         position="bottom-right"
