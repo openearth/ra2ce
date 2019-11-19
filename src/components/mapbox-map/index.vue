@@ -16,6 +16,10 @@
       <map-control-baselayer
         :layers="mapBaseLayers"
         position="bottom-right"
+      >
+      <map-control-fitbounds
+        :fitToBounds="fitToBounds"
+        position="bottom-right"
       />
 
       <!-- Map Layers -->
@@ -35,11 +39,13 @@ import { MAP_CENTER, MAP_ZOOM, MAP_BASELAYERS, MAP_BASELAYER_DEFAULT } from '@/l
 import { operatorCosts, societalCosts } from '@/lib/project-layers';
 import MapLayer from './map-layer.js';
 import MapControlBaselayer from './map-control-baselayer';
+import MapControlFitbounds from './map-control-fitbounds';
 
 export default {
   components: {
     MapLayer,
-    MapControlBaselayer
+    MapControlBaselayer,
+    MapControlFitbounds
   },
 
   computed: {
@@ -69,8 +75,12 @@ export default {
       map.on('load', () => {
         this.$root.mapLoaded = true;
       });
-      map.on('style.load', () => {
-        console.log('style loaded!');
+    },
+    fitToBounds() {
+      // @REFACTOR :: We do a simple flyto at the moment, we could also fit to actual bounds of layers
+      this.$root.map.flyTo({
+        center: this.mapConfig.center,
+        zoom: this.mapConfig.zoom
       });
     }
   },
