@@ -13,6 +13,10 @@
       <!-- Map Controls -->
       <v-mapbox-geocoder />
       <v-mapbox-navigation-control position="bottom-right" />
+      <map-control-baselayer
+        :layers="mapBaseLayers"
+        position="bottom-right"
+      />
 
       <!-- Map Layers -->
       <map-layer
@@ -27,13 +31,15 @@
 <script>
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import { MAP_CENTER, MAP_ZOOM, MAP_BASELAYER_DEFAULT } from '@/lib/constants';
+import { MAP_CENTER, MAP_ZOOM, MAP_BASELAYERS, MAP_BASELAYER_DEFAULT } from '@/lib/constants';
 import { operatorCosts, societalCosts } from '@/lib/project-layers';
 import MapLayer from './map-layer.js';
+import MapControlBaselayer from './map-control-baselayer';
 
 export default {
   components: {
-    MapLayer
+    MapLayer,
+    MapControlBaselayer
   },
 
   computed: {
@@ -49,6 +55,9 @@ export default {
         zoom: MAP_ZOOM,
         style: MAP_BASELAYER_DEFAULT.style
       };
+    },
+    mapBaseLayers() {
+      return MAP_BASELAYERS;
     }
   },
 
@@ -59,6 +68,9 @@ export default {
       this.$root.map = map;
       map.on('load', () => {
         this.$root.mapLoaded = true;
+      });
+      map.on('style.load', () => {
+        console.log('style loaded!');
       });
     }
   },
