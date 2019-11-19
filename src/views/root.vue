@@ -50,12 +50,15 @@ export default {
     getPrioritiesError: null
   }),
 
+  watch: {
+    liveUpdate(newVal) {
+      if(newVal) this.calculatePrioritiesMap();
+    }
+  },
+
   computed: {
     risks() {
       return this.$store.getters['mapbox/layersWithVisibility'];
-    },
-    riskVisibilityProxies() {
-      return this.$store.getters['mapbox/layerVisibilityProxies'];
     },
     legendLayerId() {
       return this.$store.getters['mapbox/legendLayerId'];
