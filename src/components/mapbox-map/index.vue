@@ -13,6 +13,10 @@
       <!-- Map Controls -->
       <v-mapbox-geocoder />
       <v-mapbox-navigation-control position="bottom-right" />
+      <map-control-fitbounds
+        :fitToBounds="fitToBounds"
+        position="bottom-right"
+      />
 
       <!-- Map Layers -->
       <map-layer
@@ -30,10 +34,12 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { MAP_CENTER, MAP_ZOOM, MAP_BASELAYER_DEFAULT } from '@/lib/constants';
 import { operatorCosts, societalCosts } from '@/lib/project-layers';
 import MapLayer from './map-layer.js';
+import MapControlFitbounds from './map-control-fitbounds';
 
 export default {
   components: {
-    MapLayer
+    MapLayer,
+    MapControlFitbounds
   },
 
   computed: {
@@ -59,6 +65,13 @@ export default {
       this.$root.map = map;
       map.on('load', () => {
         this.$root.mapLoaded = true;
+      });
+    },
+    fitToBounds() {
+      // @REFACTOR :: We do a simple flyto at the moment, we could also fit to actual bounds of layers
+      this.$root.map.flyTo({
+        center: this.mapConfig.center,
+        zoom: this.mapConfig.zoom
       });
     }
   },
