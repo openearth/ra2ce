@@ -30,6 +30,20 @@ export default {
       this.map.removeLayer(this.layer.id);
       this.map.removeSource(this.layer.id);
     }
+  },
+  watch: {
+    layer: {
+      deep: true,
+      handler({ id }, newLayer) {
+        const map = this.map;
+        const oldLayer = map.getLayer(id);
+        if(oldLayer) {
+          map.removeLayer(id);
+          map.removeSource(id);
+          map.addLayer(newLayer, this.before);
+        }
+      }
+    }
   }
 };
 </script>
