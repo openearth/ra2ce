@@ -43,14 +43,6 @@ import debounce from 'lodash.debounce';
 import wps from '@/lib/wps';
 import { HAZARDS } from '@/lib/constants';
 import buildWmsLayer from '@/lib/build-wms-layer';
-
-// @TODO :: Improve when available
-const priorities = buildWmsLayer({
-  id: 'priorities',
-  layer: 'ra2ce:classroads_testing',
-  style: 'ra2ce'
-});
-
 import RisksList from '@/components/risks-list';
 import PriorityMatrix from '@/components/priority-matrix';
 
@@ -97,16 +89,15 @@ export default {
     },
 
     selectedHazard(hazard) {
-      // Remove existing layers
+      // 1. Remove all existing layers
       this.wmsLayers.forEach(({ id }) => {
         this.$store.commit('mapbox/REMOVE_WMS_LAYER', id);
       });
 
-      // Hide legend
+      // 2. Hide legend
       this.$store.commit('mapbox/SET_LEGEND_LAYER', null);
 
-
-      // Add new layers
+      // 3. Add new layers for operator and societal costs
       [
         {
           id: `${ hazard }_herstelkosten`,
@@ -115,17 +106,15 @@ export default {
         {
           id: `${ hazard }_stremmingskosten`,
           layer: `ra2ce:${ hazard }_stremmingskosten`,
-        },
-        // {
-        //   id: `${ hazard }_herstelkosten`,
-        //   layer: `ra2ce:${ hazard }_classroads_testing`,
-        //   style: 'ra2ce'
-        // }
+        }
       ]
       .map(buildWmsLayer)
       .forEach(layer => {
         this.$store.commit('mapbox/ADD_WMS_LAYER', layer);
       });
+
+      // 4. Start building priorities layer
+      this.calculatePrioritiesMap();
     }
   },
 
@@ -153,12 +142,25 @@ export default {
       wps({
         functionId: 'ra2ce_calc_ratio',
         uid: '1234',
+        // layerName: this.selectedHazard,                    @TODO :: Switch this for uid
         json_matrix: { values: this.prioritiesMatrix },
       })
       .then(() => {
         this.getPrioritiesMessage = null;
-        this.$store.commit('mapbox/REMOVE_WMS_LAYER', priorities.id);
-        this.$store.commit('mapbox/ADD_WMS_LAYER', priorities);
+
+        // const prioritiesLayer = buildWmsLayer({
+        //   id: `${ this.selectedHazard }_priorities`,
+        //   layer: `ra2ce:classroads_${ this.selectedHazard }`,
+        //   style: 'ra2ce'                                   @TODO :: Switch this ⤵️
+        // });
+        const prioritiesLayer = buildWmsLayer({
+          id: `priorities`,
+          layer: `ra2ce:classroads_testing`,
+          style: 'ra2ce'
+        });
+
+        this.$store.commit('mapbox/REMOVE_WMS_LAYER', prioritiesLayer.id);
+        this.$store.commit('mapbox/ADD_WMS_LAYER', prioritiesLayer);
       })
       .catch(() => {
         this.getPrioritiesMessage = null;
