@@ -141,23 +141,24 @@ export default {
       this.getPrioritiesError = null;
       wps({
         functionId: 'ra2ce_calc_ratio',
-        uid: '1234',
-        // layerName: this.selectedHazard,                    @TODO :: Switch this for uid
+        uid: '1234',  //@TODO :: Remove when done
+        layerName: this.selectedHazard,
         json_matrix: { values: this.prioritiesMatrix },
       })
       .then(() => {
         this.getPrioritiesMessage = null;
 
-        // const prioritiesLayer = buildWmsLayer({
-        //   id: `${ this.selectedHazard }_prioriteiten`,
-        //   layer: `ra2ce:classroads_${ this.selectedHazard }`,
-        //   style: 'ra2ce'                                   @TODO :: Switch this ⤵️
-        // });
         const prioritiesLayer = buildWmsLayer({
-          id: `priorities`,
-          layer: `ra2ce:classroads_testing`,
+          id: `${ this.selectedHazard }_prioriteiten`,
+          layer: `ra2ce:classroads`,
           style: 'ra2ce'
         });
+        // @TODO :: Remove when done
+        // const prioritiesLayer = buildWmsLayer({
+        //   id: `priorities`,
+        //   layer: `ra2ce:classroads_testing`,
+        //   style: 'ra2ce'
+        // });
 
         this.$store.commit('mapbox/REMOVE_WMS_LAYER', prioritiesLayer.id);
         this.$store.commit('mapbox/ADD_WMS_LAYER', prioritiesLayer);
