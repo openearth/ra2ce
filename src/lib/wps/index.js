@@ -7,7 +7,7 @@ export default function({ functionId, requestData, polygon, roadsIdentifier, ...
     method: 'post',
     url: process.env.VUE_APP_WPS_URL,
     data: template,
-    headers: {'Content-Type': 'application/xml'},
+    headers: {'Content-Type': 'application/xml'}
   })
   .then(({ data }) => {
     return typeof data === 'object'
