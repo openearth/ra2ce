@@ -149,7 +149,7 @@ export default {
         this.getPrioritiesMessage = null;
 
         // const prioritiesLayer = buildWmsLayer({
-        //   id: `${ this.selectedHazard }_priorities`,
+        //   id: `${ this.selectedHazard }_prioriteiten`,
         //   layer: `ra2ce:classroads_${ this.selectedHazard }`,
         //   style: 'ra2ce'                                   @TODO :: Switch this ⤵️
         // });
