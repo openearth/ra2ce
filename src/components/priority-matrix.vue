@@ -131,6 +131,12 @@ export default {
 </script>
 
 <style>
+  .priority-matrix[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+  }
+
   .priority-matrix__table {
     position: relative;
   }
