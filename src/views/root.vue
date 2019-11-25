@@ -1,8 +1,24 @@
 <template>
-  <div >
+  <div>
+
+
+    <!-- @TODO :: Vuetify this -->
+    <select
+      v-model="selectedHazard"
+    >
+      <option disabled value="">Please select one</option>
+      <option
+        v-for="hazard in hazards"
+        :key="hazard.layer_name"
+        :value="hazard.layer_name"
+      >
+        {{ hazard.name }}
+      </option>
+    </select>
+
     <risks-list
       :risks="risks"
-      :activeLegendId="legendLayerId || ''"
+      :activeLegendLayer="legendLayer || ''"
       @updateVisibility="onVisibilityChange"
       @updateLegend="onLegendChange"
       class="mb-8"
@@ -33,7 +49,15 @@
 <script>
 import debounce from 'lodash.debounce';
 import wps from '@/lib/wps';
-import { priorities } from '@/lib/project-layers';
+import { HAZARDS } from '@/lib/constants';
+import buildWmsLayer from '@/lib/build-wms-layer';
+
+// @TODO :: Improve when available
+const priorities = buildWmsLayer({
+  id: 'priorities',
+  layer: 'ra2ce:classroads_testing',
+  style: 'ra2ce'
+});
 
 import RisksList from '@/components/risks-list';
 import PriorityMatrix from '@/components/priority-matrix';
@@ -45,23 +69,21 @@ export default {
   },
 
   data: () => ({
+    selectedHazard: '',
     liveUpdate: false,
     getPrioritiesMessage: null,
     getPrioritiesError: null
   }),
 
-  watch: {
-    liveUpdate(newVal) {
-      if(newVal) this.calculatePrioritiesMap();
-    }
-  },
-
   computed: {
+    wmsLayers() {
+      return this.$store.getters['mapbox/wmsLayers'];
+    },
     risks() {
       return this.$store.getters['mapbox/layersWithVisibility'];
     },
-    legendLayerId() {
-      return this.$store.getters['mapbox/legendLayerId'];
+    legendLayer() {
+      return this.$store.getters['mapbox/legendLayer'];
     },
     edgeSize() {
       return this.$store.getters['priorities/edgeSize'];
@@ -71,6 +93,42 @@ export default {
     },
     prioritiesMatrix() {
       return this.$store.getters['priorities/prioritiesMatrix'];
+    },
+    hazards() {
+      return HAZARDS;
+    }
+  },
+
+  watch: {
+    liveUpdate(newVal) {
+      if(newVal) this.calculatePrioritiesMap();
+    },
+
+    selectedHazard(hazard) {
+      // First remove existing layers
+      this.wmsLayers.forEach(({ id }) => {
+        this.$store.commit('mapbox/REMOVE_WMS_LAYER', id);
+      });
+      // Then add layers
+      [
+        {
+          id: `${ hazard }_herstelkosten`,
+          layer: `ra2ce:${ hazard }_herstelkosten`,
+        },
+        {
+          id: `${ hazard }_stremmingskosten`,
+          layer: `ra2ce:${ hazard }_stremmingskosten`,
+        },
+        // {
+        //   id: `${ hazard }_herstelkosten`,
+        //   layer: `ra2ce:${ hazard }_classroads_testing`,
+        //   style: 'ra2ce'
+        // }
+      ]
+      .map(buildWmsLayer)
+      .forEach(layer => {
+        this.$store.commit('mapbox/ADD_WMS_LAYER', layer);
+      });
     }
   },
 
@@ -80,8 +138,9 @@ export default {
       this.$store.commit('mapbox/UPDATE_LAYER_VISIBILITY', { id, map });
     },
 
-    onLegendChange(id) {
-      this.$store.commit('mapbox/SET_LEGEND_LAYER', this.legendLayerId === id ? null : id);
+    onLegendChange(layer) {
+      // Pass this the layer, not the id
+      this.$store.commit('mapbox/SET_LEGEND_LAYER', this.legendLayer === layer ? null : layer);
     },
 
     updatePriorities(updateData) {
