@@ -20,7 +20,6 @@ export default {
   },
 
   computed: {
-    // @TODO :: Make this more robust - perhaps put layer on wmsLayer object
     legendUrl() {
       return buildLegendUrl(this.legendLayer);
     }
