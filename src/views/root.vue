@@ -1,20 +1,12 @@
 <template>
   <div>
-
-
-    <!-- @TODO :: Vuetify this -->
-    <select
+    <v-select
       v-model="selectedHazard"
-    >
-      <option disabled value="">Please select one</option>
-      <option
-        v-for="hazard in hazards"
-        :key="hazard.layer_name"
-        :value="hazard.layer_name"
-      >
-        {{ hazard.name }}
-      </option>
-    </select>
+      :items="hazards"
+      item-value="layer_name"
+      item-text="name"
+      label="Hazard"
+    ></v-select>
 
     <risks-list
       :risks="risks"
