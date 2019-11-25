@@ -12,8 +12,8 @@
         <v-btn text icon @click.stop="$emit('updateVisibility', risk.id)">
           <v-icon>{{ risk.visible ? 'mdi-eye' : 'mdi-eye-off' }}</v-icon>
         </v-btn>
-        <v-btn text icon @click.stop="$emit('updateLegend', risk.id)">
-          <v-icon>{{ risk.id === activeLegendId ? 'mdi-card-bulleted' : 'mdi-card-bulleted-off' }}</v-icon>
+        <v-btn text icon @click.stop="$emit('updateLegend', risk.layer)">
+          <v-icon>{{ risk.layer === activeLegendLayer ? 'mdi-card-bulleted' : 'mdi-card-bulleted-off' }}</v-icon>
         </v-btn>
         <span class="risks-list__item-title">
           {{ formatId2Title(risk.id) }}
@@ -30,7 +30,7 @@ export default {
       type: Array,
       required: true
     },
-    activeLegendId: {
+    activeLegendLayer: {
       type: String,
       required: true
     }

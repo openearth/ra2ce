@@ -9,19 +9,20 @@
 </template>
 
 <script>
-import legends from '@/lib/project-legends';
+import buildLegendUrl from '@/lib/build-legend-url';
 
 export default {
   props: {
-    riskId: {
+    legendLayer: {
       type: String,
       required: true
     }
   },
 
   computed: {
+    // @TODO :: Make this more robust - perhaps put layer on wmsLayer object
     legendUrl() {
-      return legends.find(({ id }) => id === this.riskId).url;
+      return buildLegendUrl(this.legendLayer);
     }
   }
 };

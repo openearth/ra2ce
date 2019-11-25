@@ -4,7 +4,7 @@ export default {
   state: {
     wmsLayers: [],
     layerVisibilityProxies: [],
-    legendLayerId: null
+    legendLayer: null
   },
 
   getters: {
@@ -17,7 +17,7 @@ export default {
         visible
       };
     }),
-    legendLayerId: state => state.legendLayerId
+    legendLayer: state => state.legendLayer
   },
 
   mutations: {
@@ -46,8 +46,8 @@ export default {
       map.setPaintProperty(id, 'raster-opacity', opacityToSet);
       layerProxy.visible = !layerProxy.visible;
     },
-    SET_LEGEND_LAYER(state, id) {
-      state.legendLayerId = id;
+    SET_LEGEND_LAYER(state, layer) {
+      state.legendLayer = layer;
     }
   }
 };

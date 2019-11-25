@@ -30,21 +30,3 @@ export const HAZARDS = [
   // {"layer_name": "bruggen", "name": "Niet kunnen sluiten bruggen"},
   {"layer_name": "bosbermbranden", "name": "Bermbranden"}
 ];
-
-export const CUSTOM_LAYERS = {
-  OPERATOR_COSTS: {
-    id: 'bosbermbranden_herstelkosten',
-    layer: 'ra2ce:bosbermbranden_herstelkosten',
-  },
-
-  SOCIETAL_COSTS: {
-    id: 'bosbermbranden_herstelkosten',
-    layer: 'ra2ce:bosbermbranden_herstelkosten',
-  },
-
-  PRIORITIES: {
-    id: 'priorities',
-    layer: 'ra2ce:classroads_testing',
-    style: 'ra2ce'
-  }
-};
