@@ -97,11 +97,16 @@ export default {
     },
 
     selectedHazard(hazard) {
-      // First remove existing layers
+      // Remove existing layers
       this.wmsLayers.forEach(({ id }) => {
         this.$store.commit('mapbox/REMOVE_WMS_LAYER', id);
       });
-      // Then add layers
+
+      // Hide legend
+      this.$store.commit('mapbox/SET_LEGEND_LAYER', null);
+
+
+      // Add new layers
       [
         {
           id: `${ hazard }_herstelkosten`,
@@ -131,7 +136,6 @@ export default {
     },
 
     onLegendChange(layer) {
-      // Pass this the layer, not the id
       this.$store.commit('mapbox/SET_LEGEND_LAYER', this.legendLayer === layer ? null : layer);
     },
 
