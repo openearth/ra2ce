@@ -5,7 +5,7 @@
     <v-app-bar
       class="app-header"
       app
-      color="indigo"
+      color="primary"
       dark
     >
       <v-toolbar-title>
