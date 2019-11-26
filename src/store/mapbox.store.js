@@ -48,12 +48,12 @@ export default {
     },
     RESET_LAYERS_VISIBILITY(state) {
       state.layerVisibilityProxies = state.layerVisibilityProxies.map(proxy => ({
-    SET_LEGEND_LAYER(state, layer) {
-      state.legendLayer = layer;
         ...proxy,
         visible: true
       }));
     },
+    SET_LEGEND_LAYER(state, layer) {
+      state.legendLayer = layer;
     }
   }
 };
