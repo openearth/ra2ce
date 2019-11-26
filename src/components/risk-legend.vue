@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import legends from '@/lib/project-legends';
+import buildLegendUrl from '@/lib/build-legend-url';
 
 export default {
   props: {
-    riskId: {
+    legendLayer: {
       type: String,
       required: true
     }
@@ -21,7 +21,7 @@ export default {
 
   computed: {
     legendUrl() {
-      return legends.find(({ id }) => id === this.riskId).url;
+      return buildLegendUrl(this.legendLayer);
     }
   }
 };

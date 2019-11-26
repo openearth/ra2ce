@@ -46,14 +46,19 @@ export default {
       map.setPaintProperty(id, 'raster-opacity', opacityToSet);
       layerProxy.visible = !layerProxy.visible;
     },
+<<<<<<< HEAD
     RESET_LAYERS_VISIBILITY(state) {
       state.layerVisibilityProxies = state.layerVisibilityProxies.map(proxy => ({
-    SET_LEGEND_LAYER(state, layer) {
-      state.legendLayer = layer;
         ...proxy,
         visible: true
       }));
     },
+    SET_LEGEND_LAYER(state, id) {
+      state.legendLayerId = id;
+=======
+    SET_LEGEND_LAYER(state, layer) {
+      state.legendLayer = layer;
+>>>>>>> master
     }
   }
 };

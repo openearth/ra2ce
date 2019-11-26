@@ -4,7 +4,8 @@
 
     <v-app-bar
       class="app-header"
-      app color="indigo"
+      app
+      color="primary"
       dark
     >
       <v-toolbar-title>
@@ -15,8 +16,8 @@
 
     <v-content>
       <risk-legend
-        v-if="legendLayerId"
-        :risk-id="legendLayerId"
+        v-if="legendLayer"
+        :legendLayer="legendLayer"
       />
       <mapbox-map />
     </v-content>
@@ -41,8 +42,8 @@ export default {
   },
 
   computed: {
-    legendLayerId() {
-      return this.$store.getters['mapbox/legendLayerId'];
+    legendLayer() {
+      return this.$store.getters['mapbox/legendLayer'];
     }
   }
 };
