@@ -80,7 +80,7 @@
           >
             <input
               class="priority-matrix__value"
-              :class="`priority-matrix__value--${priorityToClass(priorities[ ((y-1) * edgeSize + x) - 1 ])}`"
+              :class="`priority-matrix__value--${ priorityToClass(priorities[ ((y-1) * edgeSize + x) - 1 ]) }`"
               :value="priorities[ ((y-1) * edgeSize + x) - 1 ]"
               :min="1"
               :max="edgeSize"
@@ -131,6 +131,12 @@ export default {
 </script>
 
 <style>
+  .priority-matrix[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+  }
+
   .priority-matrix__table {
     position: relative;
   }

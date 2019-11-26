@@ -4,12 +4,11 @@ export default {
   state: {
     wmsLayers: [],
     layerVisibilityProxies: [],
-    legendLayerId: null
+    legendLayer: null
   },
 
   getters: {
     wmsLayers: state => state.wmsLayers,
-    layerVisibilityProxies: state => state.layerVisibilityProxies,
     layersWithVisibility: state => state.wmsLayers.map(layer => {
       const { visible } = state.layerVisibilityProxies.find(p => p.id === layer.id);
       return {
@@ -17,7 +16,7 @@ export default {
         visible
       };
     }),
-    legendLayerId: state => state.legendLayerId
+    legendLayer: state => state.legendLayer
   },
 
   mutations: {
@@ -39,6 +38,7 @@ export default {
     },
     REMOVE_WMS_LAYER(state, id) {
       state.wmsLayers = state.wmsLayers.filter(layer => layer.id !== id);
+      state.layerVisibilityProxies = state.layerVisibilityProxies.filter(layer => layer.id !== id);
     },
     UPDATE_LAYER_VISIBILITY(state, { id, map }) {
       const layerProxy = state.layerVisibilityProxies.find(proxy => proxy.id === id);
@@ -52,8 +52,8 @@ export default {
         visible: true
       }));
     },
-    SET_LEGEND_LAYER(state, id) {
-      state.legendLayerId = id;
+    SET_LEGEND_LAYER(state, layer) {
+      state.legendLayerId = layer;
     }
   }
 };

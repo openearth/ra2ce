@@ -1,12 +1,9 @@
 export default {
   name: 'v-mapbox-layer',
-
   inject: ['getMap'],
-
   render() {
     return null;
   },
-
   props: {
     options: {
       default: () => {
@@ -14,51 +11,75 @@ export default {
       },
       type: [Object, String]
     },
-    // Allows to place a layer before another
+    // allows to place a layer before another
     before: {
       type: String,
       required: false
     }
   },
-
-  methods: {
-    deferredMountedTo(map) {
-      // if we were already mounted, we need to remove the old layer
-      const oldLayer = map.getLayer(this.options.id);
-      if(oldLayer) {
-        map.removeLayer(this.options.id);
-        try {
-          map.removeSource(oldLayer.source);
-        } catch {
-          console.warn('could not remove source', oldLayer.source);
-        }
-      }
-      // if we  want to add a layer before another layer, use the before option
-      if(this.before) {
-        map.addLayer(this.options, this.before);
-      } else {
-        map.addLayer(this.options);
-      }
-    }
+  data() {
+    return {
+      // used to determine if mounted or deferredMountedTo should be used
+      isInitialized: false
+    };
   },
-
+  // watch props and rerender if they change
   watch: {
     options: {
       deep: true,
       handler() {
-        const map = this.getMap();
-        if(map) {
-          this.deferredMountedTo(map);
-        }
+        this.rerender();
       }
+    },
+    before() {
+      this.rerender();
     }
   },
-
   mounted() {
-    // We can mount the layer if the map exists
-    const map = this.getMap();
-    if(map) {
-      this.deferredMountedTo(map);
+    // only execute when map is available and layer is not already initialized
+    if (this.getMap()) {
+      this.rerender();
+      this.isInitialized = true;
+    }
+  },
+  destroyed() {
+    this.removeLayer();
+  },
+  methods: {
+    deferredMountedTo() {
+      // only execute when layer is not already initialized
+      if (!this.isInitialized) {
+        this.rerender();
+        this.isInitialized = true;
+      }
+    },
+    removeLayer() {
+      const map = this.getMap();
+      if (map) {
+        const layer = map.getLayer(this.options.id);
+
+        if (layer) {
+          map.removeLayer(this.options.id);
+          try {
+            map.removeSource(layer.source);
+          } catch {
+            console.warn('could not remove source', layer.source);
+          }
+        }
+      }
+    },
+    addLayer() {
+      const map = this.getMap();
+
+      if (this.before) {
+        map.addLayer(this.options, this.before);
+      } else {
+        map.addLayer(this.options);
+      }
+    },
+    rerender() {
+      this.removeLayer();
+      this.addLayer();
     }
   }
 };
