@@ -3,10 +3,11 @@
     <div>
       <v-select
         v-model="selectedHazard"
-        :items="hazards"
+        :items="hazardList"
         item-value="layer_name"
         item-text="name"
         label="Hazard"
+        :disabled="!hazardList.length"
       ></v-select>
 
       <risks-list
@@ -48,7 +49,6 @@
 <script>
 import debounce from 'lodash.debounce';
 import wps from '@/lib/wps';
-import { HAZARDS } from '@/lib/constants';
 import buildWmsLayer from '@/lib/build-wms-layer';
 import RisksList from '@/components/risks-list';
 import PriorityMatrix from '@/components/priority-matrix';
@@ -60,6 +60,7 @@ export default {
   },
 
   data: () => ({
+    hazardList: [],
     selectedHazard: '',
     liveUpdate: false,
     getPrioritiesMessage: null,
@@ -84,9 +85,6 @@ export default {
     },
     prioritiesMatrix() {
       return this.$store.getters['priorities/prioritiesMatrix'];
-    },
-    hazards() {
-      return HAZARDS;
     }
   },
 
@@ -162,7 +160,6 @@ export default {
             layer: `ra2ce:classroads`,
             style: 'ra2ce'
           });
-          console.log(JSON.stringify(prioritiesLayer));
 
           this.$store.commit('mapbox/REMOVE_WMS_LAYER', prioritiesLayer.id);
           this.$store.commit('mapbox/ADD_WMS_LAYER', prioritiesLayer);
@@ -182,6 +179,17 @@ export default {
       this.$store.commit('priorities/RESET_PRIORITIES');
       this.calculatePrioritiesMap();
     }
+  },
+
+  created() {
+    wps({ functionId: 'ra2ce_provide_hazard_list' })
+      .then(list => {
+        this.hazardList = list;
+      })
+      .catch(err => {
+        console.error('Error getting list of hazards: ', err);
+      })
+    ;
   }
 
 };
