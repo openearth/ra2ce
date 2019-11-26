@@ -17,9 +17,9 @@
         class="mb-8"
       />
     </div>
-    
+
     <v-spacer />
-    
+
     <priority-matrix
       :edge-size="edgeSize"
       :priorities="priorities"
@@ -50,14 +50,6 @@ import debounce from 'lodash.debounce';
 import wps from '@/lib/wps';
 import { HAZARDS } from '@/lib/constants';
 import buildWmsLayer from '@/lib/build-wms-layer';
-
-// @TODO :: Improve when available
-const priorities = buildWmsLayer({
-  id: 'priorities',
-  layer: 'ra2ce:classroads_testing',
-  style: 'ra2ce'
-});
-
 import RisksList from '@/components/risks-list';
 import PriorityMatrix from '@/components/priority-matrix';
 
@@ -104,11 +96,15 @@ export default {
     },
 
     selectedHazard(hazard) {
-      // First remove existing layers
+      // 1. Remove all existing layers
       this.wmsLayers.forEach(({ id }) => {
         this.$store.commit('mapbox/REMOVE_WMS_LAYER', id);
       });
-      // Then add layers
+
+      // 2. Hide legend
+      this.$store.commit('mapbox/SET_LEGEND_LAYER', null);
+
+      // 3. Add new layers for operator and societal costs
       [
         {
           id: `${ hazard }_herstelkosten`,
@@ -117,17 +113,15 @@ export default {
         {
           id: `${ hazard }_stremmingskosten`,
           layer: `ra2ce:${ hazard }_stremmingskosten`,
-        },
-        // {
-        //   id: `${ hazard }_herstelkosten`,
-        //   layer: `ra2ce:${ hazard }_classroads_testing`,
-        //   style: 'ra2ce'
-        // }
+        }
       ]
       .map(buildWmsLayer)
       .forEach(layer => {
         this.$store.commit('mapbox/ADD_WMS_LAYER', layer);
       });
+
+      // 4. Start building priorities layer
+      this.calculatePrioritiesMap();
     }
   },
 
@@ -138,7 +132,6 @@ export default {
     },
 
     onLegendChange(layer) {
-      // Pass this the layer, not the id
       this.$store.commit('mapbox/SET_LEGEND_LAYER', this.legendLayer === layer ? null : layer);
     },
 
@@ -146,27 +139,45 @@ export default {
       this.$store.commit('priorities/UPDATE_PRIORITIES', updateData);
 
       if(this.liveUpdate) {
-        this.calculatePrioritiesMap();
+        this.calculatePrioritiesMapDebounced();
       }
     },
 
-    calculatePrioritiesMap: debounce(function() {
+    calculatePrioritiesMap() {
       this.getPrioritiesMessage = 'Calculating the priorities layer';
       this.getPrioritiesError = null;
       wps({
         functionId: 'ra2ce_calc_ratio',
-        uid: '1234',
+        uid: '1234',  //@TODO :: Remove when done
+        layerName: this.selectedHazard,
         json_matrix: { values: this.prioritiesMatrix },
       })
       .then(() => {
         this.getPrioritiesMessage = null;
-        this.$store.commit('mapbox/REMOVE_WMS_LAYER', priorities.id);
-        this.$store.commit('mapbox/ADD_WMS_LAYER', priorities);
+
+        const prioritiesLayer = buildWmsLayer({
+          id: `${ this.selectedHazard }_prioriteiten`,
+          layer: `ra2ce:classroads`,
+          style: 'ra2ce'
+        });
+        // @TODO :: Remove when done
+        // const prioritiesLayer = buildWmsLayer({
+        //   id: `priorities`,
+        //   layer: `ra2ce:classroads_testing`,
+        //   style: 'ra2ce'
+        // });
+
+        this.$store.commit('mapbox/REMOVE_WMS_LAYER', prioritiesLayer.id);
+        this.$store.commit('mapbox/ADD_WMS_LAYER', prioritiesLayer);
       })
       .catch(() => {
         this.getPrioritiesMessage = null;
         this.getPrioritiesError = 'Error Calculating the priorities layer, please retry';
       });
+    },
+
+    calculatePrioritiesMapDebounced: debounce(function() {
+      this.calculatePrioritiesMap();
     }, 300),
 
     restart() {
