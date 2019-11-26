@@ -43,6 +43,11 @@
         RA2CE! 🏎
       </v-btn>
     </div>
+
+    <portal to="notifications">
+      <v-snackbar v-model="showGetPrioritiesMessage" top>{{ getPrioritiesMessage }}</v-snackbar>
+      <v-snackbar v-model="showGetPrioritiesError" top  color="error" timeout="3000">{{ getPrioritiesError }}</v-snackbar>
+    </portal>
   </div>
 </template>
 
@@ -85,6 +90,12 @@ export default {
     },
     prioritiesMatrix() {
       return this.$store.getters['priorities/prioritiesMatrix'];
+    },
+    showGetPrioritiesMessage() {
+      return Boolean(this.getPrioritiesMessage);
+    },
+    showGetPrioritiesError() {
+      return Boolean(this.getPrioritiesError);
     }
   },
 

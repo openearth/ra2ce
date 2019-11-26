@@ -24,6 +24,7 @@
 
     <welcome-dialog />
 
+    <portal-target name="notifications" />
   </v-app>
 </template>
 
