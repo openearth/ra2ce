@@ -1,34 +1,41 @@
 <template>
-  <div>
-    <v-select
-      v-model="selectedHazard"
-      :items="hazards"
-      item-value="layer_name"
-      item-text="name"
-      label="Hazard"
-    ></v-select>
+  <div class="fill-height d-flex flex-column">
+    <div>
+      <v-select
+        v-model="selectedHazard"
+        :items="hazards"
+        item-value="layer_name"
+        item-text="name"
+        label="Hazard"
+      ></v-select>
 
-    <risks-list
-      :risks="risks"
-      :activeLegendLayer="legendLayer || ''"
-      @updateVisibility="onVisibilityChange"
-      @updateLegend="onLegendChange"
-      class="mb-8"
-    />
+      <risks-list
+        :risks="risks"
+        :activeLegendLayer="legendLayer || ''"
+        @updateVisibility="onVisibilityChange"
+        @updateLegend="onLegendChange"
+        class="mb-8"
+      />
+    </div>
+    
+    <v-spacer />
+    
     <priority-matrix
       :edge-size="edgeSize"
       :priorities="priorities"
       @updateMatrix="updatePriorities"
       @reset="restart"
+      :disabled="!risks.length"
     />
     <div class="mt-4 d-flex align-center">
       <v-switch
         label="Live Update"
         v-model="liveUpdate"
+        :disabled="!risks.length"
       ></v-switch>
       <v-spacer />
       <v-btn
-        :disabled="liveUpdate"
+        :disabled="!risks.length || liveUpdate"
         @click="calculatePrioritiesMap"
         color="primary"
       >

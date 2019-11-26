@@ -3,7 +3,10 @@
     <h2 class="pb-4">
       Risks
     </h2>
-    <ul class="risks-list">
+    <ul
+      v-if="risks.length"
+      class="risks-list"
+    >
       <li
         class="risks-list__item"
         v-for="risk in risks"
@@ -20,6 +23,8 @@
         </span>
       </li>
     </ul>
+
+    <p v-else>Select a hazard to get risks</p>
   </div>
 </template>
 
