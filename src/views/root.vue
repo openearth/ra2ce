@@ -146,34 +146,32 @@ export default {
     calculatePrioritiesMap() {
       this.getPrioritiesMessage = 'Calculating the priorities layer';
       this.getPrioritiesError = null;
-      wps({
+
+      const wpsConfig = {
         functionId: 'ra2ce_calc_ratio',
-        uid: '1234',  //@TODO :: Remove when done
-        layerName: this.selectedHazard,
+        layer_name: this.selectedHazard,
         json_matrix: { values: this.prioritiesMatrix },
-      })
-      .then(() => {
-        this.getPrioritiesMessage = null;
+      };
 
-        const prioritiesLayer = buildWmsLayer({
-          id: `${ this.selectedHazard }_prioriteiten`,
-          layer: `ra2ce:classroads`,
-          style: 'ra2ce'
-        });
-        // @TODO :: Remove when done
-        // const prioritiesLayer = buildWmsLayer({
-        //   id: `priorities`,
-        //   layer: `ra2ce:classroads_testing`,
-        //   style: 'ra2ce'
-        // });
+      wps(wpsConfig)
+        .then(() => {
+          this.getPrioritiesMessage = null;
 
-        this.$store.commit('mapbox/REMOVE_WMS_LAYER', prioritiesLayer.id);
-        this.$store.commit('mapbox/ADD_WMS_LAYER', prioritiesLayer);
-      })
-      .catch(() => {
-        this.getPrioritiesMessage = null;
-        this.getPrioritiesError = 'Error Calculating the priorities layer, please retry';
-      });
+          const prioritiesLayer = buildWmsLayer({
+            id: `${ this.selectedHazard }_prioriteiten`,
+            layer: `ra2ce:classroads`,
+            style: 'ra2ce'
+          });
+          console.log(JSON.stringify(prioritiesLayer));
+
+          this.$store.commit('mapbox/REMOVE_WMS_LAYER', prioritiesLayer.id);
+          this.$store.commit('mapbox/ADD_WMS_LAYER', prioritiesLayer);
+        })
+        .catch(() => {
+          this.getPrioritiesMessage = null;
+          this.getPrioritiesError = 'Error Calculating the priorities layer, please retry';
+        })
+      ;
     },
 
     calculatePrioritiesMapDebounced: debounce(function() {
