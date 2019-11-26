@@ -17,9 +17,9 @@
         class="mb-8"
       />
     </div>
-    
+
     <v-spacer />
-    
+
     <priority-matrix
       :edge-size="edgeSize"
       :priorities="priorities"
@@ -139,11 +139,11 @@ export default {
       this.$store.commit('priorities/UPDATE_PRIORITIES', updateData);
 
       if(this.liveUpdate) {
-        this.calculatePrioritiesMap();
+        this.calculatePrioritiesMapDebounced();
       }
     },
 
-    calculatePrioritiesMap: debounce(function() {
+    calculatePrioritiesMap() {
       this.getPrioritiesMessage = 'Calculating the priorities layer';
       this.getPrioritiesError = null;
       wps({
@@ -174,6 +174,10 @@ export default {
         this.getPrioritiesMessage = null;
         this.getPrioritiesError = 'Error Calculating the priorities layer, please retry';
       });
+    },
+
+    calculatePrioritiesMapDebounced: debounce(function() {
+      this.calculatePrioritiesMap();
     }, 300),
 
     restart() {
