@@ -29,5 +29,8 @@ function wpsInput(identifier, data) {
 
 function inputsToWpsInputs(inputs) {
   return Object.keys(inputs)
-    .reduce((xml, key) => `${ xml }${ wpsInput(key, JSON.stringify(inputs[key])) }\n`, '');
+    .reduce((xml, key) => {
+      const value = inputs[key];
+      return `${ xml }${ wpsInput(key, typeof(value) === 'object' ? JSON.stringify(value) : value ) }\n`;
+    }, '');
 }
