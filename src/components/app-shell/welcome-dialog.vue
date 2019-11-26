@@ -26,7 +26,7 @@
         <v-btn
           class="primary"
           text
-          @click="showWelcomeDialog = false"
+          @click="onStartClick"
         >
           Let's get started
         </v-btn>
@@ -36,10 +36,26 @@
 </template>
 
 <script>
+const LOCALSTORAGE_KEY = 'ra2ce_accepted';
+
 export default {
   data: () => ({
     showWelcomeDialog: true
-  })
+  }),
+  beforeMount() {
+    const accepted = window.localStorage.getItem(LOCALSTORAGE_KEY);
+
+    if (accepted) {
+      this.showWelcomeDialog = false;
+    }
+  },
+  methods: {
+    onStartClick() {
+      this.showWelcomeDialog = false;
+
+      window.localStorage.setItem(LOCALSTORAGE_KEY, true);
+    }
+  }
 };
 </script>
 
