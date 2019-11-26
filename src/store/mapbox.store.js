@@ -53,7 +53,7 @@ export default {
       }));
     },
     SET_LEGEND_LAYER(state, layer) {
-      state.legendLayerId = layer;
+      state.legendLayer = layer;
     }
   }
 };
