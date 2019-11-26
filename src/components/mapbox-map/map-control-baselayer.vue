@@ -42,14 +42,6 @@ export default {
     currentLayerIndex: 0
   }),
 
-  computed: {
-    // @REFACTOR :: This is now tightly coupling control with implementation.
-    // We should come up with a robust way to rerender layers on style change.
-    wmsLayers() {
-      return this.$store.getters['mapbox/wmsLayers'];
-    },
-  },
-
   mounted() {
     const map = this.getMap();
     // If we are already loaded
@@ -63,22 +55,31 @@ export default {
       const nextIndex = (this.currentLayerIndex + 1) % this.layers.length;
       const { style } = this.layers[nextIndex];
       const map = this.getMap();
+      const mapboxSourceId = 'mapbox';
 
-      // First remove all layers
-      this.wmsLayers.forEach(({ id }) => {
-        map.removeLayer(id);
-        map.removeSource(id);
-      });
-      this.$store.commit('mapbox/RESET_LAYERS_VISIBILITY');
+      // extract custom layers & sources from current style
+      const { layers, sources } = map.getStyle();
+      const rasterLayers = layers.filter(
+        layer => layer.type === 'raster' && layer.source !== mapboxSourceId
+      );
+      const rasterSources = Object.keys(sources)
+        .filter(id => id !== mapboxSourceId)
+        .map(id => ({ id, ...sources[id] }))
+        .filter(source => source.type === 'raster');
 
+      // switch style
       map.setStyle(style);
       this.currentLayerIndex = nextIndex;
 
-      // Then re-add all layers
+      // re-add all custom layers when style is loaded
       map.once('style.load', () => {
-        this.wmsLayers.forEach((layer) => {
-          map.addLayer(layer);
+        rasterSources.forEach(source => {
+          if (map.getSource(source.id)) {
+            map.removeSource(source.id);
+          }
+          map.addSource(source.id, source);
         });
+        rasterLayers.forEach(layer => map.addLayer(layer));
       });
     },
 
