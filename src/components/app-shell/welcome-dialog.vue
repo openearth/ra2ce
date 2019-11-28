@@ -19,7 +19,7 @@
         >
       </div>
       <v-card-text>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Ra2ce is a webGIS toolkit based on global road datasets <a href="https://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> in combination with various hazard data. It helps users to visualize the best ratio of societal/operator costs on infrastructure.
       </v-card-text>
       <v-card-actions class="px-6 pb-6">
         <v-spacer></v-spacer>
