@@ -46,7 +46,7 @@
 
     <portal to="notifications">
       <v-snackbar v-model="showGetPrioritiesMessage" top>{{ getPrioritiesMessage }}</v-snackbar>
-      <v-snackbar v-model="showGetPrioritiesError" top  color="error" timeout="3000">{{ getPrioritiesError }}</v-snackbar>
+      <v-snackbar v-model="showGetPrioritiesError" top color="error" :timeout="3000">{{ getPrioritiesError }}</v-snackbar>
     </portal>
   </div>
 </template>
@@ -163,13 +163,13 @@ export default {
       };
 
       wps(wpsConfig)
-        .then(() => {
+        .then(({ style, layerName }) => {
           this.getPrioritiesMessage = null;
 
           const prioritiesLayer = buildWmsLayer({
             id: `${ this.selectedHazard }_prioriteiten`,
-            layer: `ra2ce:classroads`,
-            style: 'ra2ce'
+            layer: layerName,
+            style
           });
 
           this.$store.commit('mapbox/REMOVE_WMS_LAYER', prioritiesLayer.id);
@@ -184,7 +184,7 @@ export default {
 
     calculatePrioritiesMapDebounced: debounce(function() {
       this.calculatePrioritiesMap();
-    }, 300),
+    }, 600),
 
     restart() {
       this.$store.commit('priorities/RESET_PRIORITIES');
