@@ -68,8 +68,6 @@ export default {
 
   methods: {
     onMapCreated(map) {
-      // @TODO :: We need the updated vue2mapbox!!
-      // console.log(map);
       this.$root.map = map;
       map.on('load', () => {
         this.$root.mapLoaded = true;
