@@ -19,7 +19,10 @@
         >
       </div>
       <v-card-text>
-        Ra2ce is a webGIS toolkit based on global road datasets <a href="https://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> in combination with various hazard data. It helps users to visualize the best ratio of societal/operator costs on infrastructure.
+        RA2CE is a webgis tool that allows visualisation of priorities of societal/operator costs on infrastructure for various types of hazard for the Duch infrastructuren network.
+      </v-card-text>
+      <v-card-text class="text--primary">
+        The website is currently under maintenance. As a consequence, the presented prioritization may not be correct and should be checked carefully. 
       </v-card-text>
       <v-card-actions class="px-6 pb-6">
         <v-spacer></v-spacer>
@@ -36,24 +39,23 @@
 </template>
 
 <script>
-const LOCALSTORAGE_KEY = 'ra2ce_accepted';
+//const LOCALSTORAGE_KEY = 'ra2ce_accepted';
 
 export default {
   data: () => ({
     showWelcomeDialog: true
   }),
-  beforeMount() {
+ /*  beforeMount() {
+    // show welcome screen every time
     const accepted = window.localStorage.getItem(LOCALSTORAGE_KEY);
-
     if (accepted) {
       this.showWelcomeDialog = false;
     }
-  },
+  }, */
   methods: {
     onStartClick() {
       this.showWelcomeDialog = false;
-
-      window.localStorage.setItem(LOCALSTORAGE_KEY, true);
+      //window.localStorage.setItem(LOCALSTORAGE_KEY, true);
     }
   }
 };
