@@ -3,10 +3,10 @@ import { xmlRequestTemplate } from './template';
 
 export default function({ functionId, requestData, polygon, roadsIdentifier, ...rest }) {
   const template = xmlRequestTemplate({ functionId, requestData, polygon, roadsIdentifier, ...rest });
-
+  const WPS_URL = 'https://webprocessingservice.openearth.nl/wps'
   return axios({
     method: 'post',
-    url: process.env.VUE_APP_WPS_URL,
+    url: WPS_URL,
     data: template,
     headers: {'Content-Type': 'application/xml'}
   })
