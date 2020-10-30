@@ -3,7 +3,7 @@ import { xmlRequestTemplate } from './template';
 
 export default function({ functionId, requestData, polygon, roadsIdentifier, ...rest }) {
   const template = xmlRequestTemplate({ functionId, requestData, polygon, roadsIdentifier, ...rest });
-  const WPS_URL = 'https://webprocessingservice.openearth.nl/wps'
+  const WPS_URL = 'https://ra2ce.openearth.eu/wps'
   return axios({
     method: 'post',
     url: WPS_URL,
