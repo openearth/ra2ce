@@ -18,7 +18,7 @@
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^4.7.0",
     "@voorhoede/deltares-vuetify-theme": "^1.0.4",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "lodash.debounce": "^4.0.8",
     "mapbox-gl": "^1.12.0",
